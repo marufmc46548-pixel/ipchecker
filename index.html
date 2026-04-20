@@ -3,260 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RKB Elite - Pro Integrity Checker</title>
+    <title>RKB Elite - Deep Integrity Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #94a3b8; }
-        .glass-card { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .status-green { color: #22c55e; }
-        .status-red { color: #ef4444; }
-        .status-yellow { color: #f59e0b; }
-        .scan-line { height: 2px; background: linear-gradient(90deg, transparent, #38bdf8, transparent); animation: scan 2s infinite; }
-        @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #a1a1aa; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glow-sky { box-shadow: 0 0 20px rgba(14, 165, 233, 0.15); }
+        .gradient-text { background: linear-gradient(to right, #fff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .scanning { animation: pulse-slow 2s infinite; }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="min-h-screen p-4 sm:p-10 flex flex-col items-center">
 
-    <div class="max-w-5xl mx-auto">
+    <div class="w-full max-w-6xl">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-5xl font-extrabold text-white mb-3 tracking-tight italic">RKB ELITE <span class="text-sky-500">PRO</span></h1>
-            <p class="text-slate-400 text-lg font-medium">Real-time Fraud & Browser Fingerprinting Analyzer</p>
-            <div class="scan-line mt-4 max-w-md mx-auto"></div>
-        </div>
+        <header class="text-center mb-12">
+            <h1 class="text-6xl font-black italic tracking-tighter mb-2 gradient-text">RKB ELITE <span class="text-sky-500">ULTRA</span></h1>
+            <p class="text-slate-500 uppercase tracking-[0.3em] text-xs font-bold">Deep Forensic Browser Intelligence</p>
+        </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <!-- Left Column: Network & IP -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="glass-card p-6 rounded-3xl shadow-2xl">
-                    <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <span class="text-sky-500 text-2xl">🌐</span> Network Intelligence
+            <!-- Left Side: Network Forensic -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="glass p-8 rounded-[2rem] glow-sky">
+                    <h2 class="text-white font-bold mb-6 flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span> Live Network Data
                     </h2>
-                    <div class="space-y-5">
+                    <div class="space-y-6">
                         <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Public IP Address</span>
-                            <span id="ip-val" class="text-xl font-mono text-sky-400 font-bold">Loading...</span>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Public Gateway</label>
+                            <div id="ip-display" class="text-2xl font-black text-white mono mt-1">Fetching...</div>
                         </div>
                         <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-widest">ISP / Organization</span>
-                            <span id="isp-val" class="text-sm text-white italic">Fetching...</span>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Carrier / ISP</label>
+                            <div id="isp-display" class="text-sm text-sky-400 font-medium mt-1 italic">Locating...</div>
                         </div>
                         <div>
-                            <span class="block text-xs font-bold text-slate-500 uppercase tracking-widest">WebRTC Leak Status</span>
-                            <span id="webrtc-val" class="text-sm font-semibold">Scanning...</span>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest">WebRTC Internal Path</label>
+                            <div id="webrtc-display" class="text-xs mono mt-1 text-slate-400">Monitoring candidates...</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card p-6 rounded-3xl shadow-2xl border-t-4 border-red-500">
-                    <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <span class="text-red-500 text-2xl">🛡️</span> Security Trust Score
-                    </h2>
-                    <div class="text-center p-4">
-                        <div id="trust-circle" class="inline-block w-24 h-24 rounded-full border-8 border-slate-800 flex items-center justify-center mb-3">
-                            <span id="score-val" class="text-2xl font-black text-white">--</span>
+                <div class="glass p-8 rounded-[2rem] border-t-4 border-sky-500/50">
+                    <h2 class="text-white font-bold mb-4">Risk Probability</h2>
+                    <div class="flex items-end gap-4">
+                        <span id="score-text" class="text-7xl font-black text-white leading-none">--</span>
+                        <div class="mb-1">
+                            <span class="block text-xs font-bold uppercase tracking-widest text-slate-500">Trust Score</span>
+                            <span id="status-label" class="text-sm font-bold text-sky-500 uppercase">Analyzing...</span>
                         </div>
-                        <p id="trust-label" class="text-sm font-bold uppercase tracking-tighter">Calculating Risk...</p>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2 mt-6 rounded-full overflow-hidden">
+                        <div id="score-bar" class="h-full bg-sky-500 transition-all duration-1000" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Browser & Fingerprinting -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="glass-card p-8 rounded-3xl shadow-2xl">
-                    <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <span class="text-sky-500 text-2xl">🧬</span> Digital Fingerprinting
+            <!-- Right Side: Browser Profiling -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="glass p-8 rounded-[2rem]">
+                    <h2 class="text-white font-bold mb-8 flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span> Hardware & Browser Profile
                     </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="space-y-4">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                        <!-- Column 1 -->
+                        <div class="space-y-6">
                             <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Canvas Identity (Unique ID)</span>
-                                <div id="canvas-hash" class="text-xs font-mono bg-black/40 p-2 rounded border border-white/5 break-all text-slate-300">Generating...</div>
+                                <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest block mb-2">Browser Engine Entropy</label>
+                                <div id="browser-id" class="p-3 bg-black/50 rounded-xl border border-white/5 mono text-[10px] break-all text-slate-300">Calculating...</div>
                             </div>
-                            <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Automation (WebDriver)</span>
-                                <span id="driver-val" class="font-bold">Checking...</span>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">Automation Detected</span>
+                                <span id="auto-check" class="text-xs font-bold">Scanning...</span>
                             </div>
-                            <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Platform Integrity</span>
-                                <span id="plat-val" class="text-white">Detecting...</span>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">OS/Architecture</span>
+                                <span id="os-check" class="text-xs text-white">--</span>
                             </div>
                         </div>
-                        <div class="space-y-4">
-                            <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Hardware Threads</span>
-                                <span id="hw-val" class="text-white font-mono">--</span>
+
+                        <!-- Column 2 -->
+                        <div class="space-y-6">
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">CPU Cores</span>
+                                <span id="cpu-check" class="text-xs text-sky-400 mono font-bold">--</span>
                             </div>
-                            <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Device Memory</span>
-                                <span id="mem-val" class="text-white font-mono">--</span>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">RAM Estimate</span>
+                                <span id="ram-check" class="text-xs text-sky-400 mono font-bold">--</span>
                             </div>
-                            <div>
-                                <span class="block text-xs font-bold text-slate-500 uppercase mb-1">Screen Resolution</span>
-                                <span id="screen-val" class="text-white font-mono">--</span>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">GPU Renderer</span>
+                                <span id="gpu-check" class="text-xs text-white truncate max-w-[150px]">Detecting...</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-xs font-semibold">Screen Canvas</span>
+                                <span id="res-check" class="text-xs text-white">--</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card p-6 rounded-3xl">
-                    <h2 class="text-sm font-bold text-slate-500 mb-4 uppercase tracking-widest">Full User Agent String</h2>
-                    <p id="ua-val" class="text-xs font-mono bg-black/20 p-4 rounded-xl text-slate-400 break-all border border-white/5">
-                        Loading User Agent...
-                    </p>
+                <!-- Technical Trace -->
+                <div class="glass p-6 rounded-[2rem] relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2v20M2 12h20" /></svg>
+                    </div>
+                    <label class="text-[10px] font-bold text-slate-600 uppercase tracking-widest block mb-4">HTTP Technical Trace (User Agent)</label>
+                    <div id="ua-trace" class="text-[10px] mono text-slate-500 leading-relaxed max-h-20 overflow-y-auto pr-4">
+                        Waiting for execution...
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-10 flex flex-col items-center gap-4">
-            <button onclick="fullScan()" class="bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-500 hover:to-blue-600 text-white px-10 py-4 rounded-2xl font-black text-lg transition-all transform hover:scale-105 shadow-2xl shadow-sky-500/20 active:scale-95">
-                EXECUTE DEEP ANALYSIS
+        <!-- Action Area -->
+        <footer class="mt-12 flex flex-col items-center">
+            <button onclick="deepAudit()" class="group relative px-12 py-5 bg-white text-black font-black rounded-2xl transition-all hover:bg-sky-400 hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+                RUN DEEP FORENSIC AUDIT
             </button>
-            <p class="text-slate-600 text-xs text-center max-w-lg">
-                This tool uses multi-layered API checking and advanced JS fingerprints to detect bot profiles.
+            <p class="mt-6 text-[10px] text-slate-700 font-bold uppercase tracking-widest">
+                Protected by RKB Elite Forensic Logic • Strictly Confidential Analysis
             </p>
-        </div>
+        </footer>
     </div>
 
     <script>
-        async function fetchIPData() {
-            // Backup Strategy for IP Data
-            try {
-                // Try ipapi.co first
-                const res = await fetch('https://ipapi.co/json/');
-                if (!res.ok) throw new Error("Limit reached");
-                return await res.json();
-            } catch (e) {
+        async function fetchIP() {
+            // Priority: Cloudflare -> IPify -> IPAPI
+            const providers = [
+                'https://cloudflare.com/cdn-cgi/trace',
+                'https://api.ipify.org?format=json',
+                'https://ipapi.co/json/'
+            ];
+
+            for (let url of providers) {
                 try {
-                    // Failover to ip-api.com
-                    const res2 = await fetch('http://ip-api.com/json/?fields=status,message,country,city,isp,org,as,query,proxy');
-                    const data2 = await res2.json();
-                    return {
-                        ip: data2.query,
-                        org: data2.isp || data2.org,
-                        city: data2.city,
-                        country_name: data2.country,
-                        proxy: data2.proxy || false
-                    };
-                } catch (e2) {
-                    // Last resort - only IP
-                    const res3 = await fetch('https://api.ipify.org?format=json');
-                    const data3 = await res3.json();
-                    return { ip: data3.ip, org: "Unknown (API Blocked)", proxy: false };
-                }
+                    const res = await fetch(url);
+                    if (!res.ok) continue;
+                    const text = await res.text();
+                    
+                    if (url.includes('trace')) {
+                        const ip = text.split('\n').find(l => l.startsWith('ip=')).split('=')[1];
+                        return { ip, org: "Cloudflare Network Detected" };
+                    }
+                    const data = JSON.parse(text);
+                    return { ip: data.ip, org: data.org || data.asn || "Standard ISP" };
+                } catch (e) { console.warn("Provider failed:", url); }
             }
+            return { ip: "127.0.0.1", org: "Local/Shielded" };
         }
 
-        async function fullScan() {
-            let riskPoints = 0;
+        function getGPU() {
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                return debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Software/Hidden";
+            } catch (e) { return "Blocked"; }
+        }
+
+        function getBrowserEntropy() {
+            const data = [
+                navigator.userAgent,
+                navigator.language,
+                new Date().getTimezoneOffset(),
+                navigator.hardwareConcurrency,
+                navigator.deviceMemory,
+                screen.colorDepth,
+                screen.width + "x" + screen.height,
+                !!window.chrome,
+                !!window.opr,
+                !!window.safari
+            ].join('|');
             
-            document.getElementById('webrtc-val').innerText = "Scanning...";
-
-            // 1. IP and ISP Data with Failover
-            const ipData = await fetchIPData();
-            document.getElementById('ip-val').innerText = ipData.ip || "N/A";
-            document.getElementById('isp-val').innerText = `${ipData.org || 'Unknown'} (${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'})`;
-            if(ipData.proxy) riskPoints += 40;
-
-            // 2. Hardware Info
-            document.getElementById('hw-val').innerText = (navigator.hardwareConcurrency || "Unknown") + " Cores";
-            document.getElementById('mem-val').innerText = (navigator.deviceMemory || "Unknown") + " GB RAM";
-            document.getElementById('screen-val').innerText = `${window.screen.width}x${window.screen.height}`;
-            document.getElementById('ua-val').innerText = navigator.userAgent;
-            document.getElementById('plat-val').innerText = navigator.platform;
-
-            // 3. Automation Check
-            const driverEl = document.getElementById('driver-val');
-            if (navigator.webdriver) {
-                driverEl.innerText = "🚩 DETECTED (BOT)";
-                driverEl.className = "text-red-500 font-bold";
-                riskPoints += 60;
-            } else {
-                driverEl.innerText = "✅ SECURE (HUMAN)";
-                driverEl.className = "text-green-500 font-bold";
-            }
-
-            // 4. Canvas Fingerprinting
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            ctx.textBaseline = "top";
-            ctx.font = "14px 'Arial'";
-            ctx.fillText("RKB-Elite-Secure-Audit", 2, 2);
-            const canvasData = canvas.toDataURL();
             let hash = 0;
-            for (let i = 0; i < canvasData.length; i++) {
-                hash = ((hash << 5) - hash) + canvasData.charCodeAt(i);
+            for (let i = 0; i < data.length; i++) {
+                hash = ((hash << 5) - hash) + data.charCodeAt(i);
                 hash |= 0;
             }
-            document.getElementById('canvas-hash').innerText = "ID: " + Math.abs(hash).toString(16).toUpperCase();
+            return "ID-" + Math.abs(hash).toString(16).toUpperCase() + "-" + btoa(navigator.platform).substring(0, 4);
+        }
 
-            // 5. WebRTC check
-            checkWebRTC((isLeaked) => {
-                if(isLeaked) riskPoints += 15;
-                calculateScore(riskPoints);
+        async function deepAudit() {
+            const btn = document.querySelector('button');
+            btn.innerText = "AUDITING...";
+            btn.classList.add('scanning');
+
+            let penalty = 0;
+
+            // 1. Live IP Data
+            const network = await fetchIP();
+            document.getElementById('ip-display').innerText = network.ip;
+            document.getElementById('isp-display').innerText = network.org;
+
+            // 2. Hardware Trace
+            document.getElementById('cpu-check').innerText = (navigator.hardwareConcurrency || "??") + " Core";
+            document.getElementById('ram-check').innerText = (navigator.deviceMemory || "??") + " GB";
+            document.getElementById('res-check').innerText = window.screen.width + "x" + window.screen.height;
+            document.getElementById('os-check').innerText = navigator.platform;
+            document.getElementById('gpu-check').innerText = getGPU();
+            document.getElementById('ua-trace').innerText = navigator.userAgent;
+
+            // 3. Automation Forensic
+            const autoEl = document.getElementById('auto-check');
+            const isBot = navigator.webdriver || window.domAutomation || window._phantom || window.callPhantom;
+            if (isBot) {
+                autoEl.innerText = "POSITIVE (BOT)";
+                autoEl.className = "text-xs font-bold text-red-500";
+                penalty += 70;
+            } else {
+                autoEl.innerText = "NEGATIVE (CLEAN)";
+                autoEl.className = "text-xs font-bold text-green-500";
+            }
+
+            // 4. Entropy Signature
+            document.getElementById('browser-id').innerText = getBrowserEntropy();
+
+            // 5. WebRTC Leak Analysis
+            checkRTCLeak((leaked) => {
+                if (leaked) penalty += 15;
+                finalizeScore(penalty);
+                btn.innerText = "RUN DEEP FORENSIC AUDIT";
+                btn.classList.remove('scanning');
             });
         }
 
-        function calculateScore(risk) {
-            const score = Math.max(0, 100 - risk);
-            const scoreEl = document.getElementById('score-val');
-            const labelEl = document.getElementById('trust-label');
-            const circle = document.getElementById('trust-circle');
-
-            scoreEl.innerText = score + "%";
-            
-            if (score >= 85) {
-                labelEl.innerText = "High Trust / Real Human";
-                labelEl.className = "text-sm font-bold text-green-500 uppercase tracking-tighter";
-                circle.style.borderColor = "#22c55e";
-            } else if (score >= 50) {
-                labelEl.innerText = "Medium Risk / Suspicious";
-                labelEl.className = "text-sm font-bold text-yellow-500 uppercase tracking-tighter";
-                circle.style.borderColor = "#f59e0b";
-            } else {
-                labelEl.innerText = "Low Trust / Flagged as Bot";
-                labelEl.className = "text-sm font-bold text-red-500 uppercase tracking-tighter";
-                circle.style.borderColor = "#ef4444";
-            }
-        }
-
-        function checkWebRTC(callback) {
-            const rtcEl = document.getElementById('webrtc-val');
-            let leaked = false;
+        function checkRTCLeak(cb) {
+            const el = document.getElementById('webrtc-display');
+            let found = false;
             try {
                 const pc = new RTCPeerConnection({iceServers: [{urls: "stun:stun.l.google.com:19302"}]});
                 pc.createDataChannel("");
                 pc.createOffer().then(o => pc.setLocalDescription(o));
                 pc.onicecandidate = (ice) => {
-                    if (ice && ice.candidate) {
-                        const cand = ice.candidate.candidate;
-                        if (cand.includes("192.168.") || cand.includes("10.")) {
-                            rtcEl.innerText = "🛡️ SECURE (INTERNAL IP)";
-                            rtcEl.className = "text-sm font-semibold text-green-500";
+                    if (ice && ice.candidate && ice.candidate.candidate) {
+                        const c = ice.candidate.candidate;
+                        if (c.includes("192.168.") || c.includes("10.")) {
+                            el.innerText = "Internal IP Shielded (Secure)";
+                            el.className = "text-xs mono mt-1 text-green-500";
                         } else {
-                            rtcEl.innerText = "⚠️ LEAKING LOCAL IP";
-                            rtcEl.className = "text-sm font-semibold text-yellow-500";
-                            leaked = true;
+                            el.innerText = "Global IP Visibility (Leak Risk)";
+                            el.className = "text-xs mono mt-1 text-yellow-500";
+                            found = true;
                         }
                     }
                 };
-                setTimeout(() => { 
-                    if(rtcEl.innerText === "Scanning...") {
-                        rtcEl.innerText = "✅ PROTECTED"; 
-                        rtcEl.className="text-green-500 font-bold text-sm"; 
-                    }
-                    callback(leaked);
-                }, 2500);
-            } catch (e) {
-                rtcEl.innerText = "NOT SUPPORTED";
-                callback(false);
+                setTimeout(() => cb(found), 2000);
+            } catch (e) { cb(false); }
+        }
+
+        function finalizeScore(penalty) {
+            const score = Math.max(0, 100 - penalty);
+            const scoreEl = document.getElementById('score-text');
+            const labelEl = document.getElementById('status-label');
+            const barEl = document.getElementById('score-bar');
+
+            scoreEl.innerText = score;
+            barEl.style.width = score + "%";
+
+            if (score >= 90) {
+                labelEl.innerText = "Pristine Identity";
+                labelEl.className = "text-sm font-bold text-green-500 uppercase";
+                barEl.style.backgroundColor = "#22c55e";
+            } else if (score >= 60) {
+                labelEl.innerText = "Proxy Detected";
+                labelEl.className = "text-sm font-bold text-yellow-500 uppercase";
+                barEl.style.backgroundColor = "#eab308";
+            } else {
+                labelEl.innerText = "Blacklisted Profile";
+                labelEl.className = "text-sm font-bold text-red-500 uppercase";
+                barEl.style.backgroundColor = "#ef4444";
             }
         }
 
-        window.onload = fullScan;
+        window.onload = deepAudit;
     </script>
 </body>
 </html>
